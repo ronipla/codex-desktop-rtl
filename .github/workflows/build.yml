@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  windows:
+    name: Windows build
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build artifact
+        shell: pwsh
+        run: .\Build-CodexDesktopRTL-All.ps1
+
+      - name: Verify artifact
+        shell: pwsh
+        run: |
+          Get-Item .\dist\CodexDesktopRTL.exe
+          Get-FileHash .\dist\CodexDesktopRTL.exe -Algorithm SHA256
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-desktop-rtl-windows
+          path: |
+            dist/CodexDesktopRTL.exe
+            dist/CHECKSUMS.txt

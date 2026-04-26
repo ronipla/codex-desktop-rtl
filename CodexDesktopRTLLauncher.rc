@@ -1,0 +1,11 @@
+#define IDI_APP 1
+#define IDR_PORTABLE 101
+#define IDR_PATCH_ASAR 102
+#define IDR_PATCH_INTEGRITY 103
+#define IDR_ICON_FILE 104
+
+IDI_APP ICON "CodexDesktopRTL.ico"
+IDR_PORTABLE RCDATA "CodexDesktopRTL-Portable.ps1"
+IDR_PATCH_ASAR RCDATA "Patch-Codex-Asar-RTL.ps1"
+IDR_PATCH_INTEGRITY RCDATA "Patch-Codex-Exe-AsarIntegrity.ps1"
+IDR_ICON_FILE RCDATA "CodexDesktopRTL.ico"

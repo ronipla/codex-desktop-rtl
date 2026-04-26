@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build artifact
+        shell: pwsh
+        run: .\Build-CodexDesktopRTL-All.ps1
+
+      - name: Create GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}" } else { "manual-${{ github.run_number }}" }
+          gh release create $tag `
+            .\dist\CodexDesktopRTL.exe `
+            .\dist\CHECKSUMS.txt `
+            --title "Codex Desktop RTL $tag" `
+            --notes-file .\docs\RELEASE_NOTES_v0.1.0.md
