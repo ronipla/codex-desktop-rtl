@@ -14,6 +14,7 @@ It does not modify the official Codex installation under `C:\Program Files\Windo
 - Creates a desktop shortcut named `Codex Desktop RTL`.
 - Rebuilds the injected copy automatically when the official Codex Desktop app changes.
 - Runs the copied Codex with an isolated user-data folder so it can open next to the official Codex session.
+- Provides `status` and `reset` modes for diagnostics and repair.
 
 ## Run
 
@@ -25,7 +26,7 @@ Current artifact:
 
 ```text
 dist/CodexDesktopRTL.exe
-SHA256: A0877E325CF6F1D663E52B771E71D4C698EFE9F102237502D2B133008ADA7A99
+SHA256: CA5A8EAA809EEC5D69BFDBF3615BCBFF225C95AB08C1A139BF1D6EE36299C510
 ```
 
 Windows may show a SmartScreen warning because the executable is not code-signed.
@@ -74,6 +75,16 @@ Then it runs `CodexDesktopRTL-Portable.ps1`, which:
 6. Launches the copied Codex app through a current-user scheduled task with `CODEX_ELECTRON_USER_DATA_PATH` set to `%LOCALAPPDATA%\CodexDesktopRTL\UserData`.
 
 The official Codex Desktop installation is not changed.
+
+## Documentation
+
+- Hebrew README: [README.he.md](README.he.md)
+- Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- Distribution: [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)
+- Testing: [docs/TESTING.md](docs/TESTING.md)
+- Security: [docs/SECURITY.md](docs/SECURITY.md)
+- Threat model: [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)
+- Release process: [docs/RELEASE.md](docs/RELEASE.md)
 
 ## Current Limitations
 

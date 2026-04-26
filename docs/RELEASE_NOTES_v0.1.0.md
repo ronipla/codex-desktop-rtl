@@ -8,6 +8,8 @@ Initial Windows MVP.
 - Runtime RTL/BiDi ASAR patch for copied Codex Desktop app.
 - Electron ASAR integrity resource update for the copied executable.
 - Isolated `CODEX_ELECTRON_USER_DATA_PATH` so the copied app can run next to the official Codex session.
+- Retry-based cleanup for reset/rebuild.
+- Diagnostic status mode that reports whether the ASAR marker is present.
 - Automatic rebuild when the official Codex Desktop app changes.
 - Desktop shortcut creation.
 - English and Hebrew documentation.
@@ -17,7 +19,7 @@ Initial Windows MVP.
 
 ```text
 CodexDesktopRTL.exe
-SHA256: A0877E325CF6F1D663E52B771E71D4C698EFE9F102237502D2B133008ADA7A99
+SHA256: CA5A8EAA809EEC5D69BFDBF3615BCBFF225C95AB08C1A139BF1D6EE36299C510
 ```
 
 ## Known Limitations

@@ -14,6 +14,7 @@ Codex Desktop RTL מפעיל עותק של Codex Desktop עם תיקון RTL/BiD
 - יוצר קיצור דרך בשולחן העבודה בשם `Codex Desktop RTL`.
 - אם Codex הרשמי מתעדכן, הכלי מזהה את זה ובונה מחדש את העותק המוזרק.
 - מפעיל את העותק עם תיקיית user-data נפרדת כדי שיוכל להיפתח ליד Codex הרשמי.
+- כולל מצבי `status` ו־`reset` לאבחון ותיקון.
 
 ## הרצה
 
@@ -25,7 +26,7 @@ Codex Desktop RTL מפעיל עותק של Codex Desktop עם תיקון RTL/BiD
 
 ```text
 dist/CodexDesktopRTL.exe
-SHA256: A0877E325CF6F1D663E52B771E71D4C698EFE9F102237502D2B133008ADA7A99
+SHA256: CA5A8EAA809EEC5D69BFDBF3615BCBFF225C95AB08C1A139BF1D6EE36299C510
 ```
 
 ייתכן ש־Windows יציג אזהרת SmartScreen כי הקובץ עדיין לא חתום.
@@ -56,6 +57,16 @@ SHA256: A0877E325CF6F1D663E52B771E71D4C698EFE9F102237502D2B133008ADA7A99
 אחר כך הוא מריץ את `CodexDesktopRTL-Portable.ps1`, שמאתר את Codex הרשמי, מעתיק אותו ל־`%LOCALAPPDATA%`, מזריק תיקון RTL לתוך ה־ASAR, מעדכן integrity, יוצר shortcut ומפעיל את העותק עם `CODEX_ELECTRON_USER_DATA_PATH` נפרד.
 
 ההתקנה הרשמית של Codex לא משתנה.
+
+## מסמכים נוספים
+
+- English README: [README.md](README.md)
+- ארכיטקטורה: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- הפצה: [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)
+- בדיקות: [docs/TESTING.md](docs/TESTING.md)
+- אבטחה: [docs/SECURITY.md](docs/SECURITY.md)
+- מודל איומים: [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)
+- תהליך Release: [docs/RELEASE.md](docs/RELEASE.md)
 
 ## מגבלות כרגע
 

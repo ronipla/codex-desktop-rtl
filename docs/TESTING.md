@@ -5,6 +5,7 @@
 ```powershell
 .\CodexDesktopRTL-Portable.ps1 -Mode reset
 .\dist\CodexDesktopRTL.exe
+.\CodexDesktopRTL-Portable.ps1 -Mode status
 ```
 
 Verify:
@@ -16,6 +17,7 @@ Verify:
 - The desktop shortcut `Codex Desktop RTL.lnk` exists.
 - A Codex process runs from `%LOCALAPPDATA%\CodexDesktopRTL\Codex-Injected\Codex.exe`.
 - The copied app uses `%LOCALAPPDATA%\CodexDesktopRTL\UserData` via `CODEX_ELECTRON_USER_DATA_PATH`.
+- Status mode reports `AsarContainsBidiMarker: True`.
 
 Result on the development machine:
 
@@ -27,7 +29,8 @@ Result on the development machine:
   "AsarContainsBidiMarker": true,
   "ShortcutExists": true,
   "UserDataExists": true,
-  "RunningInjectedCodexProcesses": 4
+  "RunningInjectedCodexProcesses": 1,
+  "StatusReportsMarker": true
 }
 ```
 

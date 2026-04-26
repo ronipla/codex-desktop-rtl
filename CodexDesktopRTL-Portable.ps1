@@ -123,6 +123,41 @@ function Stop-InjectedCodex {
         Stop-Process -Force -ErrorAction SilentlyContinue
 }
 
+function Remove-DirectoryWithRetry {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+
+        [int]$Retries = 8,
+        [int]$DelayMs = 500
+    )
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return
+    }
+
+    for ($attempt = 1; $attempt -le $Retries; $attempt++) {
+        try {
+            Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction Stop
+            return
+        } catch {
+            if ($attempt -eq $Retries) {
+                throw
+            }
+            Start-Sleep -Milliseconds $DelayMs
+        }
+    }
+}
+
+function Test-AsarPatchMarker {
+    if (-not (Test-Path -LiteralPath $injectedAsar)) {
+        return $false
+    }
+
+    $asarText = [System.Text.Encoding]::UTF8.GetString([System.IO.File]::ReadAllBytes($injectedAsar))
+    return $asarText.Contains("unicode-bidi:plaintext")
+}
+
 function Write-Status {
     $official = $null
     try {
@@ -131,6 +166,9 @@ function Write-Status {
         $official = $null
     }
 
+    $runningInjected = @(Get-Process Codex -ErrorAction SilentlyContinue |
+        Where-Object { $_.Path -like "*\CodexDesktopRTL\Codex-Injected\Codex.exe" }).Count
+
     [pscustomobject]@{
         Mode = $Mode
         Root = $root
@@ -138,6 +176,8 @@ function Write-Status {
         InjectedExe = $injectedExe
         InjectedExists = (Test-Path -LiteralPath $injectedExe)
         AsarExists = (Test-Path -LiteralPath $injectedAsar)
+        AsarContainsBidiMarker = (Test-AsarPatchMarker)
+        RunningInjectedCodexProcesses = $runningInjected
         Shortcut = (Join-Path ([Environment]::GetFolderPath("DesktopDirectory")) "Codex Desktop RTL.lnk")
         UserDataDir = $userDataDir
         Log = $log
@@ -168,13 +208,13 @@ try {
 
 if ($Mode -eq "reset") {
     if (Test-Path -LiteralPath $injectedDir) {
-        Remove-Item -LiteralPath $injectedDir -Recurse -Force
+        Remove-DirectoryWithRetry -Path $injectedDir
     }
     if (Test-Path -LiteralPath $sourceMarker) {
         Remove-Item -LiteralPath $sourceMarker -Force
     }
     if (Test-Path -LiteralPath $userDataDir) {
-        Remove-Item -LiteralPath $userDataDir -Recurse -Force
+        Remove-DirectoryWithRetry -Path $userDataDir
         New-Item -ItemType Directory -Force -Path $userDataDir | Out-Null
     }
     Log "Reset completed"
@@ -198,7 +238,7 @@ if ($needsCopy) {
     }
     Log "Copying from $source"
     if (Test-Path -LiteralPath $injectedDir) {
-        Remove-Item -LiteralPath $injectedDir -Recurse -Force
+        Remove-DirectoryWithRetry -Path $injectedDir
     }
     Copy-Item -LiteralPath $source -Destination $injectedDir -Recurse -Force
     Set-Content -Path $sourceMarker -Encoding ASCII -Value $signature
