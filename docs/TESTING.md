@@ -6,6 +6,7 @@
 .\CodexDesktopRTL-Portable.ps1 -Mode reset
 .\dist\CodexDesktopRTL.exe
 .\CodexDesktopRTL-Portable.ps1 -Mode status
+tar -tf .\dist\CodexDesktopRTL-v0.1.0-Windows.zip
 ```
 
 Verify:
@@ -18,6 +19,7 @@ Verify:
 - A Codex process runs from `%LOCALAPPDATA%\CodexDesktopRTL\Codex-Injected\Codex.exe`.
 - The copied app uses `%LOCALAPPDATA%\CodexDesktopRTL\UserData` via `CODEX_ELECTRON_USER_DATA_PATH`.
 - Status mode reports `AsarContainsBidiMarker: True`.
+- The ZIP includes `CodexDesktopRTL.exe`, `README_HE.txt`, `README_EN.txt`, and `CHECKSUMS.txt`.
 
 Result on the development machine:
 

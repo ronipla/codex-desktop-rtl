@@ -10,6 +10,7 @@ Expected outputs:
 
 ```text
 dist/CodexDesktopRTL.exe
+dist/CodexDesktopRTL-v0.1.0-Windows.zip
 dist/CHECKSUMS.txt
 ```
 
@@ -17,6 +18,7 @@ dist/CHECKSUMS.txt
 
 ```powershell
 Get-FileHash .\dist\CodexDesktopRTL.exe -Algorithm SHA256
+Get-FileHash .\dist\CodexDesktopRTL-v0.1.0-Windows.zip -Algorithm SHA256
 Get-Content .\dist\CHECKSUMS.txt
 ```
 
@@ -30,6 +32,12 @@ After GitHub authentication is configured:
 gh auth login
 .\Publish-GitHub.ps1
 ```
+
+The GitHub Release should include:
+
+- `CodexDesktopRTL-v0.1.0-Windows.zip` for normal users.
+- `CodexDesktopRTL.exe` for direct/manual testing.
+- `CHECKSUMS.txt` for hash verification.
 
 ## MSI
 
