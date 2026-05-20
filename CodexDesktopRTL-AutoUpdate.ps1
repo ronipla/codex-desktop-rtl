@@ -26,7 +26,28 @@ if (-not (Test-Path -LiteralPath $portableScript)) {
 }
 
 function Find-OfficialCodexApp {
+    # Locate the official Codex Desktop app on disk. Tries three sources:
+    #  1. Currently-running Codex process (only works if it is running)
+    #  2. Registry: AppModel package repository (works from scheduled tasks,
+    #     does not need read access to C:\Program Files\WindowsApps)
+    #  3. Direct WindowsApps directory listing (only works for elevated/Trusted
+    #     contexts because that folder is ACL-restricted)
     $roots = New-Object System.Collections.Generic.List[string]
+
+    Get-Process Codex -ErrorAction SilentlyContinue |
+        Where-Object { $_.Path -like "*\WindowsApps\OpenAI.Codex_*\app\Codex.exe" } |
+        ForEach-Object { $roots.Add((Split-Path -Parent $_.Path)) }
+
+    $repoKey = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages"
+    Get-ChildItem $repoKey -ErrorAction SilentlyContinue |
+        Where-Object { $_.PSChildName -like "OpenAI.Codex_*" } |
+        ForEach-Object {
+            $packageRoot = $_.GetValue("PackageRootFolder")
+            if ($packageRoot) {
+                $roots.Add((Join-Path ([string]$packageRoot) "app"))
+            }
+        }
+
     $windowsApps = "C:\Program Files\WindowsApps"
     if (Test-Path -LiteralPath $windowsApps) {
         Get-ChildItem -LiteralPath $windowsApps -Directory -Filter "OpenAI.Codex_*" -ErrorAction SilentlyContinue |

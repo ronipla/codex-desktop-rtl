@@ -22,15 +22,26 @@ $command = "`"$pwsh`" -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -Fi
 $taskName = "CodexDesktopRTL-AutoUpdate"
 schtasks /Delete /TN $taskName /F 2>$null | Out-Null
 
-# Run daily at 03:00 plus on user logon
-schtasks /Create /TN $taskName /TR $command /SC DAILY /ST 03:00 /F | Out-Null
+# Daily task runs without elevation needed
+$dailyResult = schtasks /Create /TN $taskName /TR $command /SC DAILY /ST 03:00 /F 2>&1
+$dailyOk = $LASTEXITCODE -eq 0
+if ($dailyOk) {
+    Write-Host "[OK] Daily auto-update task registered (03:00)"
+} else {
+    Write-Host "[!]  Failed to register daily task: $dailyResult"
+}
 
-# Also a logon-time check (with a short delay so Codex isn't blocked at startup)
+# Logon task may need elevation depending on local policy. Try, but don't fail
+# the whole install if this one is rejected.
 $logonTask = "CodexDesktopRTL-AutoUpdate-Logon"
 schtasks /Delete /TN $logonTask /F 2>$null | Out-Null
-schtasks /Create /TN $logonTask /TR $command /SC ONLOGON /F | Out-Null
+$logonResult = schtasks /Create /TN $logonTask /TR $command /SC ONLOGON /F 2>&1
+$logonOk = $LASTEXITCODE -eq 0
+if ($logonOk) {
+    Write-Host "[OK] On-logon auto-update task registered"
+} else {
+    Write-Host "[i]  On-logon task not registered (needs elevation). Daily task is sufficient."
+}
 
-Write-Host "[OK] Auto-update task registered:"
-Write-Host "       - Daily at 03:00"
-Write-Host "       - On user logon"
+Write-Host ""
 Write-Host "  Script: $autoUpdateScript"
