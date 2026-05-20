@@ -6,24 +6,27 @@ This project is independent. It is not an OpenAI product, does not include Codex
 
 ## Download
 
-For normal users, download the ZIP and run the EXE inside it:
+Download the latest release from the [Releases page](https://github.com/ronipla/codex-desktop-rtl/releases/latest):
 
-- [CodexDesktopRTL-v0.1.0-Windows.zip](dist/CodexDesktopRTL-v0.1.0-Windows.zip)
+- [CodexDesktopRTL-v0.2.0-Windows.zip](https://github.com/ronipla/codex-desktop-rtl/releases/download/v0.2.0/CodexDesktopRTL-v0.2.0-Windows.zip)
+- [CHECKSUMS.txt](https://github.com/ronipla/codex-desktop-rtl/releases/download/v0.2.0/CodexDesktopRTL-v0.2.0-Windows.zip.CHECKSUMS.txt)
 
-Advanced artifact:
+Older artifacts (v0.1.0, EXE launcher):
 
-- [CodexDesktopRTL.exe](dist/CodexDesktopRTL.exe)
-- [CHECKSUMS.txt](dist/CHECKSUMS.txt)
+- See [dist/](dist/)
 
 ## Installation
 
-1. Install the official Codex Desktop app first.
-2. Download `CodexDesktopRTL-v0.1.0-Windows.zip`.
-3. Extract the ZIP.
-4. Double-click `CodexDesktopRTL.exe`.
-5. If Windows SmartScreen warns, choose `More info` and then `Run anyway` only if you trust the source.
+1. Install the official Codex Desktop app from the Microsoft Store first.
+2. Download `CodexDesktopRTL-v0.2.0-Windows.zip` from the Releases page.
+3. Extract the ZIP anywhere (Desktop, Downloads, etc.).
+4. Close all open Codex windows.
+5. Double-click `Install.cmd` inside the extracted folder.
+6. If Windows SmartScreen warns, choose `More info` and then `Run anyway` only if you trust the source.
 
-After first run, a desktop shortcut named `Codex Desktop RTL` is created.
+After installation, launch from the new desktop shortcut named `Codex Desktop RTL`.
+
+A daily + on-logon scheduled task is registered so future Codex Desktop updates re-apply the RTL patch automatically — no manual action required.
 
 ## What It Does
 
