@@ -110,7 +110,14 @@ This project uses semantic versioning:
 - Minor releases: new distribution paths or larger runtime changes.
 - Major releases: install layout or security model changes.
 
-Current Windows version: `0.1.0`.
+Current Windows version: `0.2.0`.
+
+### What's new in 0.2.0
+
+- **Auto-discovery patcher (`Patch-Codex-Asar-RTL-v2.ps1`)** — no longer hardcodes the CSS slot. Scans the asar for suitable candidates (`app-shell`, `markdown`, etc.) and picks the best one. Survives Codex updates that change Vite content hashes.
+- **Auto-update scheduled task** — daily and on-logon checks for new Codex Desktop versions and re-applies the patch.
+- **Plain `Install.cmd` / `Uninstall.cmd`** entry points so users without the EXE launcher can install too.
+- The legacy `Patch-Codex-Asar-RTL.ps1` is kept as a fallback.
 
 ## Common Issues
 
@@ -128,13 +135,21 @@ Install the official Codex Desktop app first, then run `CodexDesktopRTL.exe` aga
 
 ### RTL stops working after Codex updates
 
-Run reset, then run the EXE again:
+**Since v0.2.0** this is handled automatically — a scheduled task checks daily (and on every logon) whether the official Codex Desktop has been updated and re-applies the RTL patch if so. Logs at `%LOCALAPPDATA%\CodexDesktopRTL\AutoUpdate.log`.
+
+If you need to force a manual refresh:
+
+```powershell
+%LOCALAPPDATA%\CodexDesktopRTL\CodexDesktopRTL-Portable.ps1 -Mode run
+```
+
+If the patch fails on a brand-new Codex layout, run reset and try again:
 
 ```powershell
 %LOCALAPPDATA%\CodexDesktopRTL\CodexDesktopRTL-Portable.ps1 -Mode reset
 ```
 
-If the patch still fails, Codex likely changed its internal ASAR layout and the patcher must be updated.
+The v2 patcher auto-discovers the CSS slot inside the asar, so most Vite hash changes (the most common reason older versions broke) no longer require any update to this tool.
 
 ### Antivirus or enterprise EDR warning
 
