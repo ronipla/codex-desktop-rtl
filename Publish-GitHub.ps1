@@ -26,15 +26,16 @@ if (-not $origin) {
 }
 
 $exe = ".\dist\CodexDesktopRTL.exe"
+$zip = ".\dist\CodexDesktopRTL-v0.1.0-Windows.zip"
 $checksums = ".\dist\CHECKSUMS.txt"
 $notes = ".\docs\RELEASE_NOTES_v0.1.0.md"
 
 gh release view $Version --repo $repoFullName *> $null
 if ($LASTEXITCODE -eq 0) {
     gh release edit $Version --repo $repoFullName --notes-file $notes
-    gh release upload $Version $exe $checksums --repo $repoFullName --clobber
+    gh release upload $Version $exe $zip $checksums --repo $repoFullName --clobber
 } else {
-    gh release create $Version $exe $checksums --repo $repoFullName --title "Codex Desktop RTL $Version" --notes-file $notes
+    gh release create $Version $exe $zip $checksums --repo $repoFullName --title "Codex Desktop RTL $Version" --notes-file $notes
 }
 
 Write-Host "Published https://github.com/$repoFullName"

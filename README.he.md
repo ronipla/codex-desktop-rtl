@@ -1,76 +1,153 @@
 # Codex Desktop RTL
 
-Codex Desktop RTL מפעיל עותק של Codex Desktop עם תיקון RTL/BiDi לטקסט עברי שמשולב עם אנגלית.
+Codex Desktop RTL הוא launcher ל־Windows שיוצר עותק מקומי של Codex Desktop עם תיקון RTL/BiDi לעברית שמשולבת עם אנגלית.
 
-הכלי לא משנה את ההתקנה הרשמית של Codex תחת `C:\Program Files\WindowsApps`.
+זה פרויקט עצמאי. זה לא מוצר של OpenAI, לא כולל את Codex Desktop, ולא משנה את ההתקנה הרשמית תחת `C:\Program Files\WindowsApps`.
+
+## הורדה
+
+למשתמש רגיל, מורידים ZIP ומריצים את ה־EXE שבתוכו:
+
+- [CodexDesktopRTL-v0.1.0-Windows.zip](dist/CodexDesktopRTL-v0.1.0-Windows.zip)
+
+ארטיפקטים נוספים:
+
+- [CodexDesktopRTL.exe](dist/CodexDesktopRTL.exe)
+- [CHECKSUMS.txt](dist/CHECKSUMS.txt)
+
+## התקנה
+
+1. מתקינים קודם את Codex Desktop הרשמי.
+2. מורידים את `CodexDesktopRTL-v0.1.0-Windows.zip`.
+3. מחלצים את ה־ZIP.
+4. לוחצים פעמיים על `CodexDesktopRTL.exe`.
+5. אם Windows SmartScreen מזהיר, בוחרים `More info` ואז `Run anyway` רק אם סומכים על המקור.
+
+אחרי ההרצה הראשונה נוצר קיצור דרך בשולחן העבודה בשם `Codex Desktop RTL`.
 
 ## מה הכלי עושה
 
-- מוצא את ההתקנה המקומית הרשמית של Codex Desktop.
-- מעתיק את תיקיית האפליקציה אל `%LOCALAPPDATA%\CodexDesktopRTL\Codex-Injected`.
-- מזריק תיקון CSS קטן לתוך העותק של `resources\app.asar`.
-- מעדכן את מנגנון ה־Electron ASAR integrity בתוך העותק של `Codex.exe`.
-- מפעיל את העותק המוזרק.
-- יוצר קיצור דרך בשולחן העבודה בשם `Codex Desktop RTL`.
-- אם Codex הרשמי מתעדכן, הכלי מזהה את זה ובונה מחדש את העותק המוזרק.
-- מפעיל את העותק עם תיקיית user-data נפרדת כדי שיוכל להיפתח ליד Codex הרשמי.
-- כולל מצבי `status` ו־`reset` לאבחון ותיקון.
+- מאתר את Codex Desktop הרשמי שמותקן במחשב.
+- מעתיק את תיקיית האפליקציה הרשמית אל `%LOCALAPPDATA%\CodexDesktopRTL\Codex-Injected`.
+- מזריק תיקון RTL/BiDi לתוך העותק של `resources\app.asar`.
+- מעדכן Electron ASAR integrity בתוך העותק של `Codex.exe`.
+- מפעיל את העותק עם תיקיית user-data מבודדת.
+- יוצר או מעדכן shortcut.
+- בונה מחדש את העותק המקומי כש־Codex הרשמי מתעדכן.
 
-## הרצה
+## מה הכלי לא עושה
 
-```powershell
-.\dist\CodexDesktopRTL.exe
-```
+- לא משנה את `C:\Program Files\WindowsApps`.
+- לא משנה את ההתקנה הרשמית של Codex.
+- לא כולל קבצי Codex.
+- לא מתקין service.
+- לא מוסיף startup.
+- לא אוסף tokens, cookies, סיסמאות או תוכן שיחות.
+- לא פותח פורטים נכנסים.
 
-הארטיפקט הנוכחי:
+## הבדל חשוב מול Claude Desktop RTL
 
-```text
-dist/CodexDesktopRTL.exe
-SHA256: CA5A8EAA809EEC5D69BFDBF3615BCBFF225C95AB08C1A139BF1D6EE36299C510
-```
+Claude Desktop RTL מריץ את Claude הרשמי החתום ומזריק RTL בזמן ריצה.
 
-ייתכן ש־Windows יציג אזהרת SmartScreen כי הקובץ עדיין לא חתום.
-
-## בנייה
-
-דרישות:
-
-- Windows.
-- Codex Desktop מותקן.
-- Visual Studio Build Tools 2019 ומעלה עם `ml64.exe`, `link.exe`, ו־Windows SDK `rc.exe`.
-- PowerShell 7 מומלץ. Windows PowerShell משמש fallback.
-
-בניית EXE:
-
-```powershell
-.\Build-CodexDesktopRTL-All.ps1
-```
+Codex Desktop RTL כרגע עובד אחרת: הוא יוצר עותק מקומי ומבצע patch לעותק. זו הייתה הדרך האמינה עבור Codex Desktop. זה שקוף ומכוון, אבל סביר יותר לקבל אזהרות SmartScreen/EDR לעומת Claude. להפצה בארגון צריך חתימת קוד ובדיקת endpoint security.
 
 ## איך זה עובד
 
-ה־EXE הוא launcher native קטן שמכיל בתוכו את סקריפטי ה־PowerShell והאייקון. בזמן הרצה הוא מחלץ אותם אל:
+`CodexDesktopRTL.exe` הוא launcher native קטן. בזמן הרצה הוא מחלץ את ה־PowerShell runner, סקריפטי patch והאייקון אל:
 
 ```text
 %LOCALAPPDATA%\CodexDesktopRTL\Payload
 ```
 
-אחר כך הוא מריץ את `CodexDesktopRTL-Portable.ps1`, שמאתר את Codex הרשמי, מעתיק אותו ל־`%LOCALAPPDATA%`, מזריק תיקון RTL לתוך ה־ASAR, מעדכן integrity, יוצר shortcut ומפעיל את העותק עם `CODEX_ELECTRON_USER_DATA_PATH` נפרד.
+ה־PowerShell runner:
+
+1. מאתר את Codex Desktop הרשמי.
+2. מעתיק אותו אל `%LOCALAPPDATA%\CodexDesktopRTL\Codex-Injected`.
+3. מזריק תיקון ל־`resources\app.asar`.
+4. מעדכן Electron ASAR integrity בעותק של `Codex.exe`.
+5. יוצר `%LOCALAPPDATA%\CodexDesktopRTL\UserData`.
+6. מפעיל את העותק עם `CODEX_ELECTRON_USER_DATA_PATH` שמצביע לתיקייה המבודדת.
 
 ההתקנה הרשמית של Codex לא משתנה.
 
-## מסמכים נוספים
+## קבצים שנכתבים
 
-- English README: [README.md](README.md)
-- ארכיטקטורה: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- הפצה: [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)
-- בדיקות: [docs/TESTING.md](docs/TESTING.md)
-- אבטחה: [docs/SECURITY.md](docs/SECURITY.md)
-- מודל איומים: [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)
-- תהליך Release: [docs/RELEASE.md](docs/RELEASE.md)
+```text
+%LOCALAPPDATA%\CodexDesktopRTL\
+  Payload\
+  Codex-Injected\
+  UserData\
+  CodexDesktopRTL-Portable.ps1
+  CodexDesktopRTL.cmd
+  CodexDesktopRTL-Launch.cmd
+  CodexDesktopRTL.ico
+  CodexDesktopRTL.log
+  source.marker
+```
 
-## מגבלות כרגע
+## הסרה / איפוס
 
-- Windows בלבד.
-- ה־EXE עדיין לא חתום.
-- התיקון תלוי במבנה הפנימי הנוכחי של Codex Desktop.
-- הכלי לא סוגר את Codex הרשמי בכוונה, כדי לא להרוג את הסשן שממנו העבודה הזאת רצה.
+סוגרים את Codex Desktop RTL ואז מריצים:
+
+```powershell
+%LOCALAPPDATA%\CodexDesktopRTL\CodexDesktopRTL-Portable.ps1 -Mode reset
+```
+
+או מוחקים ידנית:
+
+```text
+%LOCALAPPDATA%\CodexDesktopRTL
+Desktop\Codex Desktop RTL.lnk
+```
+
+ההתקנה הרשמית של Codex לא נפגעת.
+
+## ניהול גרסאות
+
+הפרויקט משתמש ב־Semantic Versioning:
+
+- Patch: תיקונים לאותו ASAR layout, docs, packaging.
+- Minor: נתיבי הפצה חדשים או שינויי runtime גדולים יותר.
+- Major: שינוי במבנה התקנה או במודל אבטחה.
+
+גרסת Windows נוכחית: `0.1.0`.
+
+## בעיות נפוצות
+
+### Windows SmartScreen מזהיר
+
+ה־EXE עדיין לא חתום. זה צפוי ב־MVP הנוכחי. להפצה בארגון צריך build חתום ב־Authenticode.
+
+### Codex נפתח כסשן נפרד
+
+זה צפוי. העותק משתמש ב־`%LOCALAPPDATA%\CodexDesktopRTL\UserData` כדי לא להתנגש עם הסשן הרשמי של Codex.
+
+### Codex לא נמצא
+
+להתקין קודם את Codex Desktop הרשמי ואז להריץ שוב את `CodexDesktopRTL.exe`.
+
+### RTL הפסיק לעבוד אחרי עדכון Codex
+
+להריץ reset ואז להריץ שוב:
+
+```powershell
+%LOCALAPPDATA%\CodexDesktopRTL\CodexDesktopRTL-Portable.ps1 -Mode reset
+```
+
+אם זה עדיין נכשל, כנראה Codex שינה את מבנה ה־ASAR וצריך לעדכן את ה־patcher.
+
+### אנטי־וירוס או EDR מזהיר
+
+ה־build מחלץ PowerShell scripts ומבצע patch לעותק מקומי של Electron app. זה שקוף ומכוון, אבל build לא חתום עדיין עלול להיות מסומן. להפצה בארגון צריך חתימת קוד.
+
+## אבטחה ושקיפות
+
+הכלי מבצע patch רק לעותק תחת `%LOCALAPPDATA%`. הוא לא משנה את החבילה הרשמית של Codex. ה־tradeoff הוא שהעותק המקומי משתנה, ולכן זה פחות מתאים לארגונים עד שיש חתימה ובדיקות endpoint security.
+
+מסמכים נוספים:
+
+- [Security](docs/SECURITY.md)
+- [Threat model](docs/THREAT_MODEL.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Testing](docs/TESTING.md)
+- [Release process](docs/RELEASE.md)

@@ -31,7 +31,10 @@ New-Item -ItemType Directory -Force -Path $userDataDir | Out-Null
 foreach ($name in @(
     "CodexDesktopRTL-Portable.ps1",
     "Patch-Codex-Asar-RTL.ps1",
+    "Patch-Codex-Asar-RTL-v2.ps1",
     "Patch-Codex-Exe-AsarIntegrity.ps1",
+    "Register-AutoUpdate.ps1",
+    "CodexDesktopRTL-AutoUpdate.ps1",
     "CodexDesktopRTL.ico"
 )) {
     $src = Join-Path $payload $name
@@ -244,8 +247,11 @@ if ($needsCopy) {
     Set-Content -Path $sourceMarker -Encoding ASCII -Value $signature
 }
 
-Log "Patching ASAR"
-& (Join-Path $payload "Patch-Codex-Asar-RTL.ps1") `
+Log "Patching ASAR (v2 - auto-discover slot)"
+$patcherV2 = Join-Path $payload "Patch-Codex-Asar-RTL-v2.ps1"
+$patcherV1 = Join-Path $payload "Patch-Codex-Asar-RTL.ps1"
+$patcher = if (Test-Path -LiteralPath $patcherV2) { $patcherV2 } else { $patcherV1 }
+& $patcher `
     -Target $injectedAsar `
     -BackupPath (Join-Path $root "app.asar.pre-rtl-bak") |
     ForEach-Object { Log $_ }

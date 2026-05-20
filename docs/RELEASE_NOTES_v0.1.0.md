@@ -14,12 +14,14 @@ Initial Windows MVP.
 - Desktop shortcut creation.
 - English and Hebrew documentation.
 - Security notes.
+- ZIP artifact for direct download.
 
 ## Artifacts
 
 ```text
+CodexDesktopRTL-v0.1.0-Windows.zip
 CodexDesktopRTL.exe
-SHA256: CA5A8EAA809EEC5D69BFDBF3615BCBFF225C95AB08C1A139BF1D6EE36299C510
+CHECKSUMS.txt
 ```
 
 ## Known Limitations
